@@ -1,10 +1,10 @@
-# 🚦 Traffic Sign Detection using Deep Learning
+# 🚦 Traffic Sign Recognition using Deep Learning
 
-A web-based Traffic Sign Detection application developed using **PyTorch**. The system utilizes a custom Convolutional Neural Network (CNN) trained on the **German Traffic Sign Recognition Benchmark (GTSRB)** dataset to classify traffic signs into 43 different categories.
+A web-based Traffic Sign Recognition application developed using **PyTorch**. The system utilizes a custom Convolutional Neural Network (CNN) trained on the **German Traffic Sign Recognition Benchmark (GTSRB)** dataset to classify traffic signs into 43 different categories.
 
 ## Features
 
-- 🚦 Traffic Sign Detection
+- 🚦 Traffic Sign Recognition
 - 🧠 Custom CNN Architecture
 - 📤 Image Upload Interface
 - 📊 Confidence Score & Top-5 Predictions
