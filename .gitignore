@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Dataset
+dataset/
+
+# Training checkpoints (intermediate epochs)
+checkpoints/
+
+# Models (trained model is tracked: models/best_model.pt)
+# models/
+
+# Streamlit cache (legacy)
+.streamlit/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

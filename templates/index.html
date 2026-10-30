@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Traffic Sign Recognition | PyTorch CNN Deep Learning</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Cropper.js for Interactive Image Cropping -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <!-- Chart.js for Model Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dark-theme">
+
+    <!-- Background Particle Ambient Glow -->
+    <div class="ambient-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="brand-icon"><i class="fa-solid fa-diamond-turn-right"></i></div>
+                <div class="brand-text">
+                    <span class="brand-title">NeuroSign AI</span>
+                    <span class="brand-tag">GTSRB CNN Engine</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#hero" class="nav-link active"><i class="fa-solid fa-house-chimney"></i> Overview</a>
+                <a href="#analytics" class="nav-link"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+                <a href="#catalog" class="nav-link"><i class="fa-solid fa-shapes"></i> Sign Catalog</a>
+                <a href="#studio" class="nav-link"><i class="fa-solid fa-microchip"></i> Predictor Studio</a>
+            </nav>
+
+            <div class="nav-actions">
+                <div class="status-badge pulse-active">
+                    <span class="pulse-dot"></span>
+                    <span class="status-text">PyTorch Ready</span>
+                </div>
+                <a href="#studio" class="btn btn-primary nav-cta">Try Studio <i class="fa-solid fa-bolt"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- SECTION 1: HERO LANDING PAGE -->
+        <section id="hero" class="hero-section">
+            <div class="hero-grid">
+                <div class="hero-text-content">
+                    <div class="badge-pill">
+                        <i class="fa-solid fa-award"></i> German Traffic Sign Recognition Benchmark (GTSRB)
+                    </div>
+                    <h1 class="hero-title">
+                        Real-Time Traffic Sign Recognition via <span class="gradient-text">Convolutional Neural Networks</span>
+                    </h1>
+                    <p class="hero-description">
+                        An advanced Deep Learning system designed to identify and classify 43 unique German traffic signs instantly. Built with PyTorch, custom multi-stage ConvBlocks, and optimized data augmentations.
+                    </p>
+
+                    <div class="hero-cta-group">
+                        <a href="#studio" class="btn btn-lg btn-primary glowing-btn">
+                            Launch AI Predictor <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#analytics" class="btn btn-lg btn-glass">
+                            View Model Metrics <i class="fa-solid fa-chart-pie"></i>
+                        </a>
+                    </div>
+
+                    <!-- Highlights Stat Bar -->
+                    <div class="hero-stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value gradient-text" id="stat-accuracy">98.92%</div>
+                            <div class="stat-label">Test Accuracy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">43</div>
+                            <div class="stat-label">Sign Classes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">&lt; 15ms</div>
+                            <div class="stat-label">Inference Latency</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12,630+</div>
+                            <div class="stat-label">Test Images</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Model Architecture Diagram -->
+                <div class="hero-visual">
+                    <div class="glass-card architecture-card">
+                        <div class="card-header-clean">
+                            <h3><i class="fa-solid fa-layer-group"></i> CNN Model Architecture</h3>
+                            <span class="code-badge">TrafficSignCNN</span>
+                        </div>
+                        <div class="architecture-flow">
+                            <div class="flow-step">
+                                <div class="step-icon"><i class="fa-regular fa-image"></i></div>
+                                <div class="step-details">
+                                    <span class="step-name">Input Tensor</span>
+                                    <span class="step-dim">128 × 128 × 3 RGB</span>
+                                </div>
+                            </div>
+                            <div class="flow-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                            <div class="flow-step highlight-step">
+                                <div class="step-icon"><i class="fa-solid fa-cubes"></i></div>
+                                <div class="step-details">
+                                    <span class="step-name">4× ConvBlocks</span>
+                                    <span class="step-dim">Conv2d + BatchNorm + ReLU + MaxPool (32→256)</span>
+                                </div>
+                            </div>
+                            <div class="flow-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i class="fa-solid fa-compress-arrows-alt"></i></div>
+                                <div class="step-details">
+                                    <span class="step-name">Adaptive Avg Pooling</span>
+                                    <span class="step-dim">Spatial reduction to 1×1</span>
+                                </div>
+                            </div>
+                            <div class="flow-arrow"><i class="fa-solid fa-chevron-down"></i></div>
+                            <div class="flow-step">
+                                <div class="step-icon"><i class="fa-solid fa-network-wired"></i></div>
+                                <div class="step-details">
+                                    <span class="step-name">Dense Classifier</span>
+                                    <span class="step-dim">Linear(256→256) → Linear(128) → 43 Softmax Logits</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MODEL PERFORMANCE & ANALYTICS -->
+        <section id="analytics" class="section-block">
+            <div class="section-header">
+                <span class="section-subtitle">Deep Learning Metrics</span>
+                <h2 class="section-title">Model Achievements & Training Curves</h2>
+                <p class="section-desc">Quantitative evaluation results obtained on the German Traffic Sign Recognition Benchmark (GTSRB) test set.</p>
+            </div>
+
+            <!-- Key Metric Cards -->
+            <div class="metrics-row">
+                <div class="metric-box">
+                    <div class="metric-icon accuracy-color"><i class="fa-solid fa-bullseye"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">Test Accuracy</span>
+                        <span class="metric-num" id="metric-accuracy">98.92%</span>
+                    </div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-icon precision-color"><i class="fa-solid fa-crosshair"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">Precision (Weighted)</span>
+                        <span class="metric-num" id="metric-precision">98.95%</span>
+                    </div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-icon recall-color"><i class="fa-solid fa-filter"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">Recall (Weighted)</span>
+                        <span class="metric-num" id="metric-recall">98.92%</span>
+                    </div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-icon f1-color"><i class="fa-solid fa-chart-simple"></i></div>
+                    <div class="metric-info">
+                        <span class="metric-title">F1 Score</span>
+                        <span class="metric-num" id="metric-f1">98.91%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Matrix Container -->
+            <div class="analytics-grid">
+                <div class="glass-card chart-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-chart-line"></i> Training & Validation Accuracy</h3>
+                        <span class="pill-tag">100 Epochs</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card chart-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-wave-square"></i> Training & Validation Loss</h3>
+                        <span class="pill-tag">AdamW + Cosine Annealing</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="lossChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confusion Matrix Showcase -->
+            <div class="glass-card matrix-card">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fa-solid fa-table-cells"></i> Confusion Matrix Visualization</h3>
+                        <p class="sub-text">Classification distribution across all 43 traffic sign classes</p>
+                    </div>
+                    <button class="btn btn-sm btn-glass" id="open-matrix-modal">
+                        <i class="fa-solid fa-expand"></i> View Fullscreen
+                    </button>
+                </div>
+                <div class="matrix-preview-container">
+                    <img src="/outputs/confusion_matrix.png" alt="Confusion Matrix" class="matrix-preview-img" onerror="this.src='https://via.placeholder.com/800x400/181824/6366f1?text=Confusion+Matrix+Generated+After+Testing'">
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: SIGN CATALOG EXPLORER -->
+        <section id="catalog" class="section-block">
+            <div class="section-header">
+                <span class="section-subtitle">Dataset Knowledge Base</span>
+                <h2 class="section-title">German Traffic Sign Catalog (43 Classes)</h2>
+                <p class="section-desc">Explore the full range of traffic signs recognized by the neural network.</p>
+            </div>
+
+            <!-- Category Filter Pills -->
+
+            <div class="catalog-filters">
+                <button class="filter-btn active" data-category="all">All Signs (43)</button>
+                <button class="filter-btn" data-category="Speed Limit">Speed Limits</button>
+                <button class="filter-btn" data-category="Priority">Priority</button>
+                <button class="filter-btn" data-category="Warning">Warnings</button>
+                <button class="filter-btn" data-category="Prohibitory">Prohibitory</button>
+                <button class="filter-btn" data-category="Mandatory">Mandatory</button>
+            </div>
+
+            <!-- Catalog Search Bar -->
+            <div class="catalog-search">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="catalog-search-input" placeholder="Search by sign name, German name, or class ID...">
+            </div>
+
+            <!-- Sign Grid Container -->
+            <div class="sign-grid" id="sign-grid-container">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- SECTION 4: LIVE AI PREDICTOR STUDIO -->
+        <section id="studio" class="section-block studio-section">
+            <div class="section-header">
+                <span class="section-subtitle">Real-Time Inference</span>
+                <h2 class="section-title">AI Traffic Sign Predictor Studio</h2>
+                <p class="section-desc">Upload an image, capture a live camera snapshot, or select a sample preset to recognize the traffic sign.</p>
+            </div>
+
+            <div class="studio-grid">
+                
+                <!-- LEFT COLUMN: INPUT WORKSPACE -->
+                <div class="glass-card input-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-cloud-arrow-up"></i> Image Input Workspace</h3>
+                        <span class="status-indicator-sm" id="input-status">Ready</span>
+                    </div>
+
+                    <!-- Drag and Drop Dropzone -->
+                    <div class="dropzone" id="dropzone">
+                        <input type="file" id="file-input" accept="image/*" class="file-input-hidden">
+                        <div class="dropzone-content" id="dropzone-prompt">
+                            <div class="upload-icon-circle">
+                                <i class="fa-solid fa-cloud-arrow-up"></i>
+                            </div>
+                            <h4>Drag & Drop Traffic Sign Image Here</h4>
+                            <p>or click to browse local files (JPG, PNG, WEBP, PPM)</p>
+                            <button class="btn btn-sm btn-primary mt-2">Choose File</button>
+                        </div>
+
+                        <!-- Image Preview Overlay -->
+                        <div class="image-preview-wrapper hidden" id="preview-wrapper">
+                            <img id="image-preview" src="" alt="Selected Preview">
+                            <button class="btn-remove-preview" id="btn-remove-image" title="Remove image">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Input Toolbar -->
+                    <div class="input-toolbar">
+                        <button class="btn btn-glass btn-icon-text" id="btn-open-camera">
+                            <i class="fa-solid fa-camera"></i> Live Web Camera
+                        </button>
+                        <button class="btn btn-glass btn-icon-text hidden" id="btn-open-crop">
+                            <i class="fa-solid fa-crop-simple"></i> Crop / Focus Sign
+                        </button>
+                    </div>
+
+
+                    <!-- Quick Sample Presets Bar -->
+                    <div class="presets-section">
+                        <span class="presets-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Try Quick Sample Presets:</span>
+                        <div class="presets-grid" id="sample-presets">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Run Prediction Button -->
+                    <button class="btn btn-lg btn-primary btn-full glowing-btn mt-3" id="btn-predict" disabled>
+                        <i class="fa-solid fa-bolt"></i> Recognize Traffic Sign
+                    </button>
+                </div>
+
+                <!-- RIGHT COLUMN: OUTPUT RESULTS WORKSPACE -->
+                <div class="glass-card output-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-square-poll-vertical"></i> Recognition Results</h3>
+                        <span class="latency-badge" id="latency-badge">-- ms</span>
+                    </div>
+
+                    <!-- Initial Empty Placeholder State -->
+                    <div class="output-placeholder" id="output-placeholder">
+                        <div class="placeholder-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h4>No Image Analyzed Yet</h4>
+                        <p>Upload a traffic sign image or click a sample preset to view real-time CNN model predictions.</p>
+                    </div>
+
+                    <!-- Prediction Loading Spinner -->
+                    <div class="output-loader hidden" id="output-loader">
+                        <div class="spinner-ring"></div>
+                        <p>Running PyTorch Neural Network Inference...</p>
+                    </div>
+
+                    <!-- Results Content Container -->
+                    <div class="output-content hidden" id="output-content">
+                        
+                        <!-- Primary Prediction Hero Box -->
+                        <div class="primary-result-box" id="primary-box">
+                            <div class="result-top-row">
+                                <div class="sign-icon-badge" id="result-icon">🛑</div>
+                                <div class="result-title-group">
+                                    <span class="category-pill" id="result-category">Priority</span>
+                                    <h3 class="result-sign-name" id="result-name">Stop Sign</h3>
+                                    <span class="result-german-name" id="result-german">Halt! Vorfahrt gewähren!</span>
+                                </div>
+                                <div class="confidence-circle" id="confidence-circle">
+                                    <span class="conf-percent" id="result-confidence">99.8%</span>
+                                    <span class="conf-label">Match</span>
+                                </div>
+                            </div>
+
+                            <div class="result-rule-box">
+                                <i class="fa-solid fa-shield-halved rule-icon"></i>
+                                <div class="rule-text">
+                                    <strong>Traffic Rule & Action:</strong>
+                                    <p id="result-description">Drivers must come to a complete stop and yield to all cross traffic before proceeding.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top-5 Probabilities Breakdown -->
+                        <div class="top-k-section">
+                            <h4 class="top-k-title"><i class="fa-solid fa-list-ol"></i> Top-5 Candidate Probabilities</h4>
+                            <div class="top-k-bars" id="top-k-list">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <i class="fa-solid fa-diamond-turn-right text-gradient"></i> NeuroSign AI Engine
+            </div>
+            <p class="footer-text">Built with PyTorch CNN • German Traffic Sign Recognition Benchmark (GTSRB)</p>
+            <div class="footer-links">
+                <a href="#hero">Back to Top <i class="fa-solid fa-arrow-up"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WEBCAM CAPTURE MODAL -->
+    <div class="modal-overlay hidden" id="camera-modal">
+        <div class="glass-card modal-container">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-camera"></i> Live Web Camera Snapshot</h3>
+                <button class="modal-close" id="btn-close-camera"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <video id="webcam-video" autoplay playsinline></video>
+                <canvas id="webcam-canvas" class="hidden"></canvas>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-glass" id="btn-cancel-camera">Cancel</button>
+                <button class="btn btn-primary" id="btn-capture-snapshot"><i class="fa-solid fa-camera"></i> Capture & Analyze</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFUSION MATRIX FULLSCREEN LIGHTBOX -->
+    <div class="modal-overlay hidden" id="matrix-modal">
+        <div class="glass-card modal-container modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-table-cells"></i> GTSRB Confusion Matrix</h3>
+                <button class="modal-close" id="btn-close-matrix"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="/outputs/confusion_matrix.png" alt="Confusion Matrix Full" class="img-fullscreen">
+            </div>
+        </div>
+    </div>
+
+    <!-- CROPPER MODAL -->
+    <div class="modal-overlay hidden" id="crop-modal">
+        <div class="glass-card modal-container modal-lg">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-crop-simple"></i> Drag Box Around Traffic Sign</h3>
+                <button class="modal-close" id="btn-close-crop"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body text-center" style="max-height: 460px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: var(--radius-md);">
+                <img id="cropper-img" src="" alt="Crop Source" style="max-width: 100%; max-height: 400px; display: block;">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-glass" id="btn-cancel-crop">Cancel</button>
+                <button class="btn btn-primary" id="btn-apply-crop"><i class="fa-solid fa-check"></i> Apply Crop & Recognize</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+
+
+
+
+
